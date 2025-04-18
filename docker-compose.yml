@@ -1,0 +1,24 @@
+version: '1.0'
+
+services:
+  shopcart_db:
+    image: mysql:8.4
+    container_name: shopcart_db
+    environment:
+      MYSQL_DATABASE: shopcart
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: shopcartdev
+      MYSQL_PASSWORD: shopcartdev
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql:/var/lib/mysql
+
+volumes:
+  mysql:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./mysql
+
