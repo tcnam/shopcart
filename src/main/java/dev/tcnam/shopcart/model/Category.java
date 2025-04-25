@@ -1,5 +1,7 @@
 package dev.tcnam.shopcart.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -22,6 +24,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+	private LocalDateTime createdTimestamp;
+    private String createdUser;
+    private LocalDateTime updatedTimestamp;
+    private String updatedUser;
     @OneToMany(mappedBy = "category")
     private List<Product> products;
     

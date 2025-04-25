@@ -1,6 +1,7 @@
 package dev.tcnam.shopcart.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -30,6 +31,10 @@ public class Product {
     private String description;
     private BigDecimal price;
     private int inventory;
+	private LocalDateTime createdTimestamp;
+    private String createdUser;
+    private LocalDateTime updatedTimestamp;
+    private String updatedUser;
 
     @ManyToOne()
     @JoinColumn(name = "category_id")

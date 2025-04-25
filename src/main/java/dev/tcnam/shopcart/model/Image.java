@@ -1,6 +1,7 @@
 package dev.tcnam.shopcart.model;
 
 import java.sql.Blob;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +29,10 @@ public class Image {
     @Lob
     private Blob image;
     private String url;
-
+	private LocalDateTime createdTimestamp;
+    private String createdUser;
+    private LocalDateTime updatedTimestamp;
+    private String updatedUser;
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;

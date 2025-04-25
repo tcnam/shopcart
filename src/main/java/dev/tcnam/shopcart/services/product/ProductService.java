@@ -2,18 +2,24 @@ package dev.tcnam.shopcart.services.product;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import dev.tcnam.shopcart.model.Product;
+import dev.tcnam.shopcart.repository.ProductRepository;
 
 public class ProductService implements IProductService{
 
+    // @Autowired
+    private ProductRepository productRepository;
+
     @Override
     public Product addProduct(Product product){
-
+        return productRepository.save(product);
     }
 
     @Override
     public Product getProductById(Long productId){
-
+        return productRepository.findById(productId)
     }
 
     @Override 
@@ -63,7 +69,7 @@ public class ProductService implements IProductService{
 
     @Override
     public List<Product> getProductsByBrandAndCategoryAndName(String category, String brand, String name){
-        
+
     }
 
 }
