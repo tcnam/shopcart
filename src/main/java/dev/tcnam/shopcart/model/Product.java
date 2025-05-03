@@ -26,7 +26,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "product")
+@Table(name = "product", schema = "shopcart")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +48,7 @@ public class Product {
     @Column(name = "price")
     private BigDecimal price;
 
-    @Column(name = "category_id")
+    @Column(name = "category_id", insertable = false, updatable = false)
     private Long categoryId;
 
     @Column(name = "created_timestamp")
@@ -67,6 +67,7 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
     
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany()
+    @JoinColumn(name = "product_id")
     private List<Image> images;
 }

@@ -2,7 +2,9 @@ package dev.tcnam.shopcart.spec;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import org.apache.catalina.startup.Catalina;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
@@ -12,36 +14,49 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+
 import dev.tcnam.shopcart.model.Category;
+import dev.tcnam.shopcart.model.Image;
+
 
 public class ProductSpecifications implements Specification<Product>{
 
-    public static Specification<Product> brandLike(String brand){
-        return (root, query, criteriaBuilder) ->{
-            return criteriaBuilder.like(criteriaBuilder.lower(root.get("brand")), "%"+brand.toLowerCase()+"%");
-        };
-            
-    }
+    private List<SearchCriteria> filters;
 
-    public static Specification<Product> nameLike(String name){
-        return (root, query, criteriaBuilder) ->{
-            return criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%"+name.toLowerCase()+"%");
-        };
-    }
-
-    public static Specification<Product> categoryLike(String category){
-        return (root, query, criteriaBuilder) -> {
-            Join<Product, Category> categoryJoin = root.join()
-        }
+    public ProductSpecifications (List<SearchCriteria> searchCriterias) {
+        this.filters = searchCriterias;
     }
 
     @Override
     public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        // TODO Auto-generated method stub
-        List<Predicate> predicates = new ArrayList<>();
-        Root<Product> productRoot = query.from(Product.class);
-        Join<Product, Category> categoryJoin = root.join(null, null))
+        List<Predicate> predicates = new ArrayList();
 
-        throw new UnsupportedOperationException("Unimplemented method 'toPredicate'");
+        // Root<Category> categoryRoot = query.from(Category.class);
+        // Root<Image> imageRoot = query.from(Image.class);
+
+        Join<Product, Category> productJoinCategory = root.join("category", JoinType.INNER);
+        Join<Product, Image> productJoinImage = root.join("images", JoinType.INNER);
+
+        if (Objects.nonNull(this.filters)) {
+            for (SearchCriteria filter : this.filters){
+                switch (filter.getOperation()) {
+                    case EQUALITY:
+                        predicates.add(criteriaBuilder.equal(root.get(filter.getKey()), filter.getValue()));
+                        break;
+                    case GREATER_THAN:
+                        predicates.add(criteriaBuilder.greaterThan(root.get(filter.getKey()), filter.getValue().toString()));
+                        break;
+                    case LESS_THAN:
+                        predicates.add(criteriaBuilder.lessThan(root.get(filter.getKey()), filter.getValue().toString()));
+                        break;
+                    case LIKE:
+                        predicates.add(criteriaBuilder.like(root.get(filter.getKey()), "%"+filter.getValue().toString()+"%"));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
 }
