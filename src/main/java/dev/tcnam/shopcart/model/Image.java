@@ -3,8 +3,6 @@ package dev.tcnam.shopcart.model;
 import java.sql.Blob;
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;

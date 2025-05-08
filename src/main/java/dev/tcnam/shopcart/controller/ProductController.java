@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.tcnam.shopcart.model.Product;
+import dev.tcnam.shopcart.services.product.IProductService;
 import dev.tcnam.shopcart.services.product.ProductService;
 import lombok.RequiredArgsConstructor;
 
@@ -24,15 +25,15 @@ import lombok.RequiredArgsConstructor;
 public class ProductController {
 
     @Autowired
-    private final ProductService productService;
+    private final IProductService productService;
 
     public ProductController(ProductService productService){
         this.productService = productService;
     }
 
-    @GetMapping()
-    public List<Product> getProducts(@RequestParam String brand, @RequestParam String name, @RequestParam String categoryName) {
-        return this.productService.getProducts(brand, name, categoryName);
+    @GetMapping("/search")
+    public List<Product> searchProducts(@RequestParam String brand, @RequestParam String name, @RequestParam String categoryName) {
+        return this.productService.searchProducts(brand, name, categoryName);
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,5 @@
 package dev.tcnam.shopcart.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -48,5 +47,13 @@ public class Category {
     @OneToMany(mappedBy = "category")
     @JsonIgnore
     private List<Product> products;
+
+    public Category(String categoryName){
+        this.name = categoryName;
+        this.createdTimestamp = LocalDateTime.now();
+        this.createdUser = "Admin";
+        this.updatedTimestamp = LocalDateTime.now();
+        this.updatedUser = "Admin";
+    }
     
 }

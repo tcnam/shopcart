@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.catalina.startup.Catalina;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
@@ -29,15 +28,12 @@ public class ProductSpecifications implements Specification<Product>{
 
     @Override
     public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        List<Predicate> predicates = new ArrayList();
-
-        // Root<Category> categoryRoot = query.from(Category.class);
-        // Root<Image> imageRoot = query.from(Image.class);
+        List<Predicate> predicates = new ArrayList<Predicate>();
 
         Join<Product, Category> productJoinCategory = root.join("category", JoinType.INNER);
         Join<Product, Image> productJoinImage = root.join("images", JoinType.INNER);
 
-        if (Objects.nonNull(this.filters)) {
+        if (this.filters.isEmpty() == false) {
             for (SearchCriteria filter : this.filters){
                 switch (filter.getOperation()) {
                     case EQUALITY:
