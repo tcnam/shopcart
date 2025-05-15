@@ -36,9 +36,9 @@ public class ProductController {
         return this.productService.searchProducts(brand, name, categoryName);
     }
 
-    @GetMapping("/{id}")
-    public Optional<Product> getProductById(@PathVariable Long productId) {
-        return this.productService.getProductById(productId);
-    }
+    // @GetMapping("/{id}")
+    // public Optional<Product> getProductById(@PathVariable Long productId) {
+    //     return this.productService.getProductById(productId);
+    // }
     
 }
