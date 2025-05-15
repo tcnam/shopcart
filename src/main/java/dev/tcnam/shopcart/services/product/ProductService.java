@@ -8,8 +8,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dev.tcnam.shopcart.dto.ImageDto;
-import dev.tcnam.shopcart.dto.ProductDto;
 import dev.tcnam.shopcart.model.Category;
 import dev.tcnam.shopcart.model.Image;
 import dev.tcnam.shopcart.model.Product;
@@ -30,7 +28,7 @@ public class ProductService implements IProductService{
     private final ProductRepository productRepository;
     private final ImageRepository imageRepository;
     private final CategoryRepository categoryRepository;
-    // private final ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     // @Override
     // public Product addProduct(AddProductRequest request){
@@ -41,10 +39,13 @@ public class ProductService implements IProductService{
     //     return productRepository.save(product);
     // }
 
-    @Override
-    public Optional<Product> getProductById(Long productId){
-        return productRepository.findById(productId);
-    }
+    // @Override
+    // public Optional<Product> getProductById(Long productId){
+    //     Optional<Product> prod = productRepository.findById(productId);
+    //     if (Objects.isNull(prod)){
+    //         throw new 
+    //     }
+    // }
 
     // @Override
     // public void deteteProductById(Long id) {

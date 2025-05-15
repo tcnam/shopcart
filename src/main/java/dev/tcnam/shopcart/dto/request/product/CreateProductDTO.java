@@ -1,15 +1,15 @@
-package dev.tcnam.shopcart.request;
+package dev.tcnam.shopcart.dto.request.product;
 
 import java.math.BigDecimal;
 
 import lombok.Data;
 
 @Data
-public class AddProductRequest {
+public class CreateProductDTO {
     private String brand;
     private String description;
-    private int inventory;
+    private Integer inventory;
     private String name;
     private BigDecimal price;
-    private String categoryName;
+    private Long categoryId;
 }
