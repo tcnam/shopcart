@@ -1,6 +1,8 @@
 use shopcart;
 go
 
+drop table if EXISTS category;
+
 create table if not exists category (
 	category_id bigint not null auto_increment,
 	name varchar(255),
@@ -14,12 +16,13 @@ create table if not exists category (
 ENGINE=INNODB;
 go
 
+drop table if EXISTS product;
 create table if not exists product (
 	product_id bigint not null auto_increment,
+	name varchar(255),
 	brand varchar(255),
 	description varchar(255),
 	iventory int,
-	name varchar(255),
 	price decimal(38,2),
 	category_id bigint,
 	created_timestamp datetime,
@@ -34,6 +37,7 @@ create table if not exists product (
 ENGINE=INNODB;
 go
 
+drop table if EXISTS image;
 create table if not exists image (
 	image_id bigint not null auto_increment,
 	download_url varchar(255),
