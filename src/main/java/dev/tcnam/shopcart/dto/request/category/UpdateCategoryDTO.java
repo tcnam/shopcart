@@ -1,5 +1,8 @@
 package dev.tcnam.shopcart.dto.request.category;
 
-public class UpdateCategoryDTO {
+import lombok.Data;
 
+@Data
+public class UpdateCategoryDTO {
+   private String name;
 }

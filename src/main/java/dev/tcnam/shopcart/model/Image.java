@@ -32,7 +32,7 @@ public class Image {
     private Long imageId;
 
     @Column(name = "download_url")
-    private String download_url;
+    private String downloadUrl;
 
     @Column(name = "file_name")
     private String fileName;
@@ -44,8 +44,8 @@ public class Image {
     @Column(name = "image")
     private Blob image;
 
-    @Column(name = "product_id", insertable = false, updatable = false)
-    private Long productId;
+    // @Column(name = "product_id", insertable = false, updatable = false)
+    // private Long productId;
 
     @Column(name = "created_timestamp")
 	private LocalDateTime createdTimestamp;

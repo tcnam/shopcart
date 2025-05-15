@@ -30,6 +30,9 @@ public class Product {
     @Column(name = "product_id")
     private Long productId;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "brand")
     private String brand;
 
@@ -37,16 +40,13 @@ public class Product {
     private String description;
 
     @Column(name = "iventory")
-    private int inventory;
-
-    @Column(name = "name")
-    private String name;
+    private Integer inventory;
 
     @Column(name = "price")
     private BigDecimal price;
 
-    @Column(name = "category_id", insertable = false, updatable = false)
-    private Long categoryId;
+    // @Column(name = "category_id", insertable = false, updatable = false)
+    // private Long categoryId;
 
     @Column(name = "created_timestamp")
 	private LocalDateTime createdTimestamp;
