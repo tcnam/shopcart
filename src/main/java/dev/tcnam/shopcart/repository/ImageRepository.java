@@ -11,5 +11,5 @@ import dev.tcnam.shopcart.model.Image;
 
 @Repository
 public interface ImageRepository extends JpaRepository<Category, Long>, JpaSpecificationExecutor<Category>{
-    List<Image> findByProductId(Long id);
+    // List<Image> findByProductId(Long id);
 }

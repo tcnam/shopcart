@@ -8,6 +8,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dev.tcnam.shopcart.dto.response.product.ProductResponseDTO;
+import dev.tcnam.shopcart.mapper.ProductMapper;
 import dev.tcnam.shopcart.model.Category;
 import dev.tcnam.shopcart.model.Image;
 import dev.tcnam.shopcart.model.Product;
@@ -19,16 +21,15 @@ import dev.tcnam.shopcart.spec.ProductSpecifications;
 import dev.tcnam.shopcart.spec.SearchCriteria;
 import dev.tcnam.shopcart.spec.SearchOperation;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService implements IProductService{
 
     private final ProductRepository productRepository;
-    private final ImageRepository imageRepository;
-    private final CategoryRepository categoryRepository;
-    private final ModelMapper modelMapper;
+    // private final ImageRepository imageRepository;
+    // private final CategoryRepository categoryRepository;
+    private final ProductMapper productMapper;
 
     // @Override
     // public Product addProduct(AddProductRequest request){
@@ -61,7 +62,7 @@ public class ProductService implements IProductService{
     // }
 
     @Override
-    public List<Product> searchProducts(String brand, String name, String categoryName){
+    public List<ProductResponseDTO> searchProducts(String brand, String name, String categoryName){
         List<SearchCriteria> predicates = new ArrayList<>();
         if (!Objects.isNull(brand) || brand != ""){
             SearchCriteria productBrand = new SearchCriteria("brand", SearchOperation.LIKE, brand);
@@ -75,12 +76,16 @@ public class ProductService implements IProductService{
 
         ProductSpecifications productSpec = new ProductSpecifications(predicates);
 
-        return productRepository.findAll(productSpec);
+        List<Product> products = new ArrayList<Product>();
+        products = this.productRepository.findAll(productSpec);
+        return this.productMapper.toResponseDTOList(products);
     }
 
     @Override
-    public List<Product> getAllProducts(){
-        return productRepository.findAll();
+    public List<ProductResponseDTO> getAllProducts(){
+        List<Product> products = new ArrayList<Product>();
+        products = this.productRepository.findAll();
+        return this.productMapper.toResponseDTOList(products);
     }
 
     // @Override
