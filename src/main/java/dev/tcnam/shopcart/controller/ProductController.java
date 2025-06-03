@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.tcnam.shopcart.dto.response.product.ProductResponseDTO;
+import dev.tcnam.shopcart.dto.product.ProductResponseDTO;
 import dev.tcnam.shopcart.model.Product;
 import dev.tcnam.shopcart.services.product.IProductService;
 import dev.tcnam.shopcart.services.product.ProductService;

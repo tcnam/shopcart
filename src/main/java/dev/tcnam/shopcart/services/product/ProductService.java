@@ -8,7 +8,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dev.tcnam.shopcart.dto.response.product.ProductResponseDTO;
+import dev.tcnam.shopcart.dto.product.ProductRequestDTO;
+import dev.tcnam.shopcart.dto.product.ProductResponseDTO;
 import dev.tcnam.shopcart.mapper.ProductMapper;
 import dev.tcnam.shopcart.model.Category;
 import dev.tcnam.shopcart.model.Image;
@@ -20,19 +21,27 @@ import dev.tcnam.shopcart.repository.ProductRepository;
 import dev.tcnam.shopcart.spec.ProductSpecifications;
 import dev.tcnam.shopcart.spec.SearchCriteria;
 import dev.tcnam.shopcart.spec.SearchOperation;
-import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class ProductService implements IProductService{
 
     private final ProductRepository productRepository;
-    // private final ImageRepository imageRepository;
-    // private final CategoryRepository categoryRepository;
-    private final ProductMapper productMapper;
+    private final ImageRepository imageRepository;
+    private final CategoryRepository categoryRepository;
+    // private final ProductMapper productMapper;
+
+    @Autowired
+    public ProductService(ProductRepository productRepository, ImageRepository imageRepository, CategoryRepository categoryRepository, ProductMapper productMapper){
+        this.productRepository = productRepository;
+        this.imageRepository = imageRepository;
+        this.categoryRepository = categoryRepository;
+    }
 
     // @Override
-    // public Product addProduct(AddProductRequest request){
+    // public void addProduct(ProductRequestDTO request){
+
+    //     Product newProduct = ProductMapper.
+
     //     Optional<Category> category = this.categoryRepository.findBy
     //     if (category.isPresent() == false){
     //         Category newCategory = new Category(null)
@@ -78,14 +87,14 @@ public class ProductService implements IProductService{
 
         List<Product> products = new ArrayList<Product>();
         products = this.productRepository.findAll(productSpec);
-        return this.productMapper.toResponseDTOList(products);
+        return ProductMapper.toDTOList(products);
     }
 
     @Override
     public List<ProductResponseDTO> getAllProducts(){
         List<Product> products = new ArrayList<Product>();
         products = this.productRepository.findAll();
-        return this.productMapper.toResponseDTOList(products);
+        return ProductMapper.toDTOList(products);
     }
 
     // @Override
