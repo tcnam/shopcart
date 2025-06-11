@@ -1,5 +1,7 @@
 package dev.tcnam.shopcart.services.product;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import dev.tcnam.shopcart.dto.product.ProductRequestDTO;
 import dev.tcnam.shopcart.dto.product.ProductResponseDTO;
+import dev.tcnam.shopcart.exeptions.ResourceNotFoundException;
+import dev.tcnam.shopcart.mapper.CategoryMapper;
 import dev.tcnam.shopcart.mapper.ProductMapper;
 import dev.tcnam.shopcart.model.Category;
 import dev.tcnam.shopcart.model.Image;
@@ -17,58 +21,103 @@ import dev.tcnam.shopcart.model.Product;
 import dev.tcnam.shopcart.repository.CategoryRepository;
 import dev.tcnam.shopcart.repository.ImageRepository;
 import dev.tcnam.shopcart.repository.ProductRepository;
-// import dev.tcnam.shopcart.request.AddProductRequest;
 import dev.tcnam.shopcart.spec.ProductSpecifications;
 import dev.tcnam.shopcart.spec.SearchCriteria;
 import dev.tcnam.shopcart.spec.SearchOperation;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService implements IProductService{
 
     private final ProductRepository productRepository;
     private final ImageRepository imageRepository;
     private final CategoryRepository categoryRepository;
-    // private final ProductMapper productMapper;
 
-    @Autowired
-    public ProductService(ProductRepository productRepository, ImageRepository imageRepository, CategoryRepository categoryRepository, ProductMapper productMapper){
-        this.productRepository = productRepository;
-        this.imageRepository = imageRepository;
-        this.categoryRepository = categoryRepository;
+    // @Autowired
+    // public ProductService(ProductRepository productRepository, ImageRepository imageRepository, CategoryRepository categoryRepository){
+    //     this.productRepository = productRepository;
+    //     this.imageRepository = imageRepository;
+    //     this.categoryRepository = categoryRepository;
+    // }
+    private Product createProduct(ProductRequestDTO request){
+        Product product = new Product();
+        product.setName(request.getName());
+        product.setBrand(request.getBrand());
+        product.setDescription(request.getDescription());
+        product.setInventory(request.getInventory());
+        product.setPrice(request.getPrice());
+        product.setCreatedTimestamp(LocalDateTime.now());
+        product.setCreatedUser("Admin");
+        product.setUpdatedTimestamp(LocalDateTime.now());
+        product.setUpdatedUser("Admin");
+        product.setCategory(request.getCategory());
+        product.setImages(request.getImages());
+        return product;
     }
 
-    // @Override
-    // public void addProduct(ProductRequestDTO request){
+    @Override
+    public ProductResponseDTO addProduct(ProductRequestDTO request){
+        // check if the category is found in the DB
+        // If Yes, set it as the new product category
+        // If No, the save it as a new category
+        // The set as the new product category.
+        Category category = this.categoryRepository.findByName(request.getCategory().getName())
+                                                    .orElseGet(()->{
+                                                        Category newCategory = new Category(request.getCategory().getName());
+                                                        return this.categoryRepository.save(newCategory);
+                                                    });
 
-    //     Product newProduct = ProductMapper.
+        Product product = this.createProduct(request);
+        product.setCategory(category);
+        return ProductMapper.toDTO(this.productRepository.save(product));
+                    
+    }
 
-    //     Optional<Category> category = this.categoryRepository.findBy
-    //     if (category.isPresent() == false){
-    //         Category newCategory = new Category(null)
-    //     }
-    //     return productRepository.save(product);
-    // }
+    @Override
+    public void deleteProductById(Long productId) {
+        this.productRepository.findById(productId)
+                .ifPresentOrElse(
+                    this.productRepository::delete,
+                    () -> {throw new ResourceNotFoundException("Product not found!");}
+                );
+    }
 
-    // @Override
-    // public Optional<Product> getProductById(Long productId){
-    //     Optional<Product> prod = productRepository.findById(productId);
-    //     if (Objects.isNull(prod)){
-    //         throw new 
-    //     }
-    // }
+    @Override
+    public ProductResponseDTO updateProduct(ProductRequestDTO request, Long productId) {
+        return ProductMapper.toDTO(
+            this.productRepository.findById(productId)
+                .map(existingProduct -> updateExistingProduct(existingProduct,request))
+                .map(productRepository :: save)
+                .orElseThrow(()-> new ResourceNotFoundException("Product not found!"))
+        );
+    }
 
-    // @Override
-    // public void deteteProductById(Long id) {
-    //     Optional<Product> prod = this.productRepository.findById(id);
-    //     if (prod.isPresent() == true){
-    //         this.productRepository.deleteById(id);
-    //     }
-    // }
+    private Product updateExistingProduct(Product existingProduct, ProductRequestDTO request) {
+        existingProduct.setName(request.getName());
+        existingProduct.setBrand(request.getBrand());
+        existingProduct.setPrice(request.getPrice());
+        existingProduct.setInventory(request.getInventory());
+        existingProduct.setDescription(request.getDescription());
 
-    // @Override
-    // public void updateProduct(ProductUpdateRequest request, Long productId) {
+        Category category = this.categoryRepository.findByName(request.getCategory().getName())
+                                                    .orElseGet(()->{
+                                                        Category newCategory = new Category(request.getCategory().getName());
+                                                        return this.categoryRepository.save(newCategory);
+                                                    });
+        existingProduct.setCategory(category);
+        return  existingProduct;
 
-    // }
+    }
+
+    @Override
+    public ProductResponseDTO getProductById(Long productId){
+        Product product = this.productRepository.findById(productId)
+                                                .orElseThrow(()-> new ResourceNotFoundException("Product not found!"));
+        return ProductMapper.toDTO(product);
+        
+    }
+
 
     @Override
     public List<ProductResponseDTO> searchProducts(String brand, String name, String categoryName){

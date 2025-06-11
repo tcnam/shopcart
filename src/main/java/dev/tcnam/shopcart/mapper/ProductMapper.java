@@ -25,9 +25,8 @@ public class ProductMapper {
         prod.setDescription(productRequestDTO.getDescription());
         prod.setInventory(productRequestDTO.getInventory());
         prod.setPrice(productRequestDTO.getPrice());
-
-        prod.setCategory(CategoryMapper.toModel(productRequestDTO.getCategory()));
-        // prod.setImages(ImageMapper.toModel(productRequestDTO.getImages()));
+        prod.setCategory(productRequestDTO.getCategory());
+        prod.setImages(productRequestDTO.getImages());
         return prod;
     }
 

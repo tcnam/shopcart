@@ -1,5 +1,8 @@
 package dev.tcnam.shopcart.services.category;
 
-public interface ICategoryService {
+import dev.tcnam.shopcart.dto.category.CategoryResponseDTO;
 
+public interface ICategoryService {
+    CategoryResponseDTO getCategoryByName(String name);
+    CategoryResponseDTO getCategoryById(Long id);
 }

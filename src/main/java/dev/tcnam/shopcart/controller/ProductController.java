@@ -1,5 +1,7 @@
 package dev.tcnam.shopcart.controller;
 
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,31 +17,41 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.tcnam.shopcart.dto.product.ProductRequestDTO;
 import dev.tcnam.shopcart.dto.product.ProductResponseDTO;
 import dev.tcnam.shopcart.model.Product;
 import dev.tcnam.shopcart.services.product.IProductService;
 import dev.tcnam.shopcart.services.product.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
 
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("shopcart/v1/products")
+@RequestMapping(value = "shopcart/v1/products")
 public class ProductController {
 
-    @Autowired
     private final IProductService productService;
-
-    public ProductController(ProductService productService){
-        this.productService = productService;
-    }
 
     @GetMapping("/search")
     public List<ProductResponseDTO> searchProducts(@RequestParam String brand, @RequestParam String name, @RequestParam String categoryName) {
         return this.productService.searchProducts(brand, name, categoryName);
     }
 
-    // @GetMapping("/{id}")
-    // public Optional<Product> getProductById(@PathVariable Long productId) {
-    //     return this.productService.getProductById(productId);
-    // }
+    @GetMapping("/{id}")
+    public ProductResponseDTO getProductById(@PathVariable Long id) {
+        return this.productService.getProductById(id);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<ProductResponseDTO> addProduct(@RequestBody ProductRequestDTO productRequestDTO) {
+        //TODO: process POST request
+        try{
+            ProductResponseDTO productResponseDTO = this.productService.addProduct(productRequestDTO);
+            return ResponseEntity.ok(productResponseDTO);
+        } catch (Exception e){
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+    
     
 }

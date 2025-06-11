@@ -26,6 +26,22 @@ import lombok.Setter;
 @Entity
 @Table(name = "product", schema = "shopcart")
 public class Product {
+    // public Product(String name, String brand, String description, int inventory, BigDecimal price,
+    //         LocalDateTime createdTimestamp, String createdUser, LocalDateTime updatedTimestamp, String updatedUser, Category category,
+    //         List<Image> images) {
+    //     this.name = name;
+    //     this.brand = brand;
+    //     this.description = description;
+    //     this.inventory = inventory;
+    //     this.price = price;
+    //     this.createdTimestamp = createdTimestamp;
+    //     this.createdUser = createdUser;
+    //     this.updatedTimestamp = updatedTimestamp;
+    //     this.updatedUser = updatedUser;
+    //     this.category = category;
+    //     this.images = images;
+    // }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")

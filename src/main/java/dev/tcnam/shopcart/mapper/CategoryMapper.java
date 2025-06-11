@@ -13,7 +13,7 @@ public class CategoryMapper {
     }
 
     public static CategoryResponseDTO toDTO(Category category){
-        CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO(category.getCategoryId(), category.getName());
+        CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO(category.getName());
         return categoryResponseDTO;
     }
 }
