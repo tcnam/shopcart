@@ -5,9 +5,8 @@ import java.util.stream.Collectors;
 
 import dev.tcnam.shopcart.dto.image.ImageRequestDTO;
 import dev.tcnam.shopcart.dto.image.ImageResponseDTO;
-import dev.tcnam.shopcart.dto.product.ProductResponseDTO;
+// import dev.tcnam.shopcart.dto.product.ProductResponseDTO;
 import dev.tcnam.shopcart.model.Image;
-import dev.tcnam.shopcart.model.Product;
 
 public class ImageMapper {
     public static Image toModel(ImageRequestDTO createImageDTO){

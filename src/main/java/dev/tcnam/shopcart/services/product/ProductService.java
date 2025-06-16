@@ -1,25 +1,20 @@
 package dev.tcnam.shopcart.services.product;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dev.tcnam.shopcart.dto.product.ProductRequestDTO;
 import dev.tcnam.shopcart.dto.product.ProductResponseDTO;
 import dev.tcnam.shopcart.exeptions.ResourceNotFoundException;
-import dev.tcnam.shopcart.mapper.CategoryMapper;
 import dev.tcnam.shopcart.mapper.ProductMapper;
 import dev.tcnam.shopcart.model.Category;
-import dev.tcnam.shopcart.model.Image;
 import dev.tcnam.shopcart.model.Product;
 import dev.tcnam.shopcart.repository.CategoryRepository;
-import dev.tcnam.shopcart.repository.ImageRepository;
+// import dev.tcnam.shopcart.repository.ImageRepository;
 import dev.tcnam.shopcart.repository.ProductRepository;
 import dev.tcnam.shopcart.spec.ProductSpecifications;
 import dev.tcnam.shopcart.spec.SearchCriteria;
@@ -31,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class ProductService implements IProductService{
 
     private final ProductRepository productRepository;
-    private final ImageRepository imageRepository;
+    // private final ImageRepository imageRepository;
     private final CategoryRepository categoryRepository;
 
     // @Autowired
@@ -69,6 +64,7 @@ public class ProductService implements IProductService{
                                                     });
 
         Product product = this.createProduct(request);
+        // product.getImages().stream().map()
         product.setCategory(category);
         return ProductMapper.toDTO(this.productRepository.save(product));
                     

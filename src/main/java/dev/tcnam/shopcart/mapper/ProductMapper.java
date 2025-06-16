@@ -1,18 +1,12 @@
 package dev.tcnam.shopcart.mapper;
 
-import java.math.BigDecimal;
+// import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
+// import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Component;
-
-import dev.tcnam.shopcart.dto.category.CategoryRequestDTO;
-import dev.tcnam.shopcart.dto.image.ImageRequestDTO;
 import dev.tcnam.shopcart.dto.product.ProductRequestDTO;
 import dev.tcnam.shopcart.dto.product.ProductResponseDTO;
-import dev.tcnam.shopcart.model.Category;
-import dev.tcnam.shopcart.model.Image;
 import dev.tcnam.shopcart.model.Product;
 
 public class ProductMapper {
