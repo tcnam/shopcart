@@ -74,18 +74,24 @@ public class ProductService implements IProductService{
     public void deleteProductById(Long productId) {
         this.productRepository.findById(productId)
                 .ifPresentOrElse(
-                    this.productRepository::delete,
-                    () -> {throw new ResourceNotFoundException("Product not found!");}
+                    (product) -> {
+                        this.productRepository.delete(product);}
+                    ,() -> {
+                        throw new ResourceNotFoundException("Product not found!");}
                 );
     }
 
     @Override
     public ProductResponseDTO updateProduct(ProductRequestDTO request, Long productId) {
         return ProductMapper.toDTO(
-            this.productRepository.findById(productId)
-                .map(existingProduct -> updateExistingProduct(existingProduct,request))
-                .map(productRepository :: save)
-                .orElseThrow(()-> new ResourceNotFoundException("Product not found!"))
+            this.productRepository
+                .findById(productId)
+                .map((existingProduct) -> {
+                    return this.updateExistingProduct(existingProduct,request);})
+                .map((existingProduct) -> {
+                    return this.productRepository.save(existingProduct);})
+                .orElseThrow(()-> {
+                    throw new ResourceNotFoundException("Product not found!");})
         );
     }
 
@@ -96,11 +102,12 @@ public class ProductService implements IProductService{
         existingProduct.setInventory(request.getInventory());
         existingProduct.setDescription(request.getDescription());
 
-        Category category = this.categoryRepository.findByName(request.getCategory().getName())
-                                                    .orElseGet(()->{
-                                                        Category newCategory = new Category(request.getCategory().getName());
-                                                        return this.categoryRepository.save(newCategory);
-                                                    });
+        Category category = this.categoryRepository
+                                    .findByName(request.getCategory().getName())
+                                    .orElseGet(()->{
+                                        Category newCategory = new Category(request.getCategory().getName());
+                                        return this.categoryRepository.save(newCategory);
+                                    });
         existingProduct.setCategory(category);
         return  existingProduct;
 
@@ -109,7 +116,7 @@ public class ProductService implements IProductService{
     @Override
     public ProductResponseDTO getProductById(Long productId){
         Product product = this.productRepository.findById(productId)
-                                                .orElseThrow(()-> new ResourceNotFoundException("Product not found!"));
+                                                .orElseThrow(()-> {throw new ResourceNotFoundException("Product not found!");});
         return ProductMapper.toDTO(product);
         
     }
@@ -141,21 +148,4 @@ public class ProductService implements IProductService{
         products = this.productRepository.findAll();
         return ProductMapper.toDTOList(products);
     }
-
-    // @Override
-    // public List<ProductDto> getConvertedProducts(List<Product> products) {
-    //     return products.stream().map(this::convertToDto).toList();
-    // }
-
-    // @Override
-    // public ProductDto convertToDto(Product product) {
-    //     ProductDto productDto = this.modelMapper.map(product, ProductDto.class);
-    //     List<Image> images = this.imageRepository.findByProductId(product.getProductId());
-    //     List<ImageDto> imageDtos = images.stream()
-    //             .map(image -> modelMapper.map(image, ImageDto.class))
-    //             .toList();
-    //     productDto.setImages(imageDtos);
-    //     return productDto;
-    // }
-
 }
